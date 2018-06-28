@@ -3,25 +3,28 @@ import numpy as np
 import cv2
 import os
 
-def lee_frames(carpeta, h):
+def lee_frames(carpeta, h, t):
 
-    numero_clusters = k
     tam_histograma = h
-
     dataset = []
+    cont = t   
 
     for imagen in os.listdir(carpeta):
-        ruta = os.path.join(carpeta,imagen)
-        img = cv2.imread(ruta)
+        if cont%t==0:
 
-        color = ('b','g','r')
-        histograma = []
-        for i,col in enumerate(color):
-            hist = cv2.calcHist([img],[i],None,[tam_histograma],[0,256])
-            for v in hist:
-                histograma.append(v[0])
+            ruta = os.path.join(carpeta,imagen)
+            img = cv2.imread(ruta)
             
-        dataset.append(histograma)
+            color = ('b','g','r')
+            histograma = []
+            for i,col in enumerate(color):
+                hist = cv2.calcHist([img],[i],None,[tam_histograma],[0,256])
+                for v in hist:
+                    histograma.append(v[0])
+                
+            dataset.append(histograma)
+
+        cont = cont + 1        
 
     return dataset
 

@@ -87,7 +87,7 @@ def unir_frames(carpeta_fotogramas,nombre_archivo_dst):
     comando = 'cd ' + ruta_carpeta_ffmpeg + ' && ffmpeg -i ' + carpeta_fotogramas + '\%d.png -c:v libx264 -vf fps=24 -s 1280x720 ' + nombre_archivo_dst
     subprocess.Popen(comando, shell=True, stdout=subprocess.PIPE).stdout.read()
 
-unir_frames('C:\\Users\\franc\\ETSII\\40_seg_video.mp4_fotogramas_secciones','hecho.mp4')
+#unir_frames('C:\\Users\\franc\\ETSII\\40_seg_video.mp4_fotogramas_secciones','hecho.mp4')
 
 #def video_to_frames(command):
 #    process = subprocess.Popen(command,stdout=subprocess.PIPE, shell=True, universal_newlines=False)
