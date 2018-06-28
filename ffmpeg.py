@@ -2,22 +2,21 @@ import subprocess
 import sys
 import os
 
-def obtain_frames(ruta_carpeta_video,v_origen,n_frame_outx1_frame_in):
+def obtain_frames(ruta_carpeta_video,v_origen,framesxseg):
 
     carpeta_destino = v_origen + '_fotogramas'
     subprocess.Popen('cd ' + ruta_carpeta_video + ' && md ' + carpeta_destino, shell=True, stdout=subprocess.PIPE).stdout.read()
 
-    if n_frame_outx1_frame_in != 1:
-        a = str(n_frame_outx1_frame_in)
-        comando_r = 'ffmpeg -i '+ v_origen + ' -r ' + a + '/1 ' + carpeta_destino + '/%03d.png'
+    if framesxseg != 1: 
+        comando_r = 'ffmpeg -i '+ v_origen + ' -r ' + str(framesxseg) + '/1 ' + carpeta_destino + '/%03d.png'
         subprocess.Popen('cd ' + ruta_carpeta_video + ' && ' + comando_r, shell=True, stdout=subprocess.PIPE).stdout.read()
-        print('Extraido 1 de cada ' + a + ' fotogramas del video ' + v_origen + ' y guardados en la carpeta '+ carpeta_destino)
+        print('Extraidos ' + str(framesxseg) + ' fotogramas por segundo del video ' + v_origen + ' y guardados en la carpeta '+ carpeta_destino)
     else:
         comando = 'ffmpeg -i '+ v_origen + ' ' + carpeta_destino + '/%03d.png'
         subprocess.Popen('cd ' + ruta_carpeta_video + ' && ' + comando, shell=True, stdout=subprocess.PIPE).stdout.read()
         print('Extraidos todos los fotogramas del video ' + v_origen + ' en la carpeta '+ carpeta_destino)
 
-#obtain_frames('C:\\Users\\franc\\ETSII\\Curso 2017-2018\\IA\\Trabajo\\ffmpeg-4.0-win64-static\\bin','40_seg_video.mp4',5)
+obtain_frames('C:\\Users\\franc\\ETSII\\Curso 2017-2018\\IA\\Trabajo\\ffmpeg-4.0-win64-static\\bin','1_min_travel_video.mp4',22)
 
 
 def mover_fotogramas(ListaKeyFrames,ruta_carpeta_origen,ruta_carpeta_destino):
@@ -41,7 +40,7 @@ def video_fps(ruta_carpeta_video,nombre_video):
     print('El video '+ nombre_video + ' se reproduce a', str(trun_fps) , 'fps')
     return trun_fps
 
-#video_fps('C:\\Users\\franc\\ETSII\\Curso 2017-2018\\IA\\Trabajo\\ffmpeg-4.0-win64-static\\bin','40_seg_video.mp4')
+#video_fps('C:\\Users\\franc\\ETSII\\Curso 2017-2018\\IA\\Trabajo\\ffmpeg-4.0-win64-static\\bin','1_min_travel_video.mp4')
 
 
 def seg_desde_frame(ruta_carpeta_origen,nombre_carpeta_dst,nombre_video,frame,seg):
@@ -87,7 +86,7 @@ def unir_frames(carpeta_fotogramas,nombre_archivo_dst):
     comando = 'cd ' + ruta_carpeta_ffmpeg + ' && ffmpeg -i ' + carpeta_fotogramas + '\%d.png -c:v libx264 -vf fps=24 -s 1280x720 ' + nombre_archivo_dst
     subprocess.Popen(comando, shell=True, stdout=subprocess.PIPE).stdout.read()
 
-unir_frames('C:\\Users\\franc\\ETSII\\40_seg_video.mp4_fotogramas_secciones','hecho.mp4')
+#unir_frames('C:\\Users\\franc\\ETSII\\40_seg_video.mp4_fotogramas_secciones','hecho.mp4')
 
 #def video_to_frames(command):
 #    process = subprocess.Popen(command,stdout=subprocess.PIPE, shell=True, universal_newlines=False)
