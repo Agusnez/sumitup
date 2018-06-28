@@ -3,33 +3,36 @@ import numpy as np
 import cv2
 import os
 
-carpeta = 'ffmpeg/bin/frames'
+def lee_frames(carpeta, h):
 
-dataset = []
+    numero_clusters = k
+    tam_histograma = h
 
-for imagen in os.listdir(carpeta):
-    ruta = os.path.join(carpeta,imagen)
-    #print(ruta)
-    img = cv2.imread(ruta)
+    dataset = []
 
-    color = ('b','g','r')
-    histograma = []
-    for i,col in enumerate(color):
-        hist = cv2.calcHist([img],[i],None,[50],[0,256])
-        for v in hist:
-            histograma.append(v[0])
-        
-    dataset.append(histograma)
+    for imagen in os.listdir(carpeta):
+        ruta = os.path.join(carpeta,imagen)
+        img = cv2.imread(ruta)
 
-kmeans = KMeans(n_clusters=16).fit(dataset)
-#print(kmeans.labels_)
+        color = ('b','g','r')
+        histograma = []
+        for i,col in enumerate(color):
+            hist = cv2.calcHist([img],[i],None,[tam_histograma],[0,256])
+            for v in hist:
+                histograma.append(v[0])
+            
+        dataset.append(histograma)
 
-clusters = {}
+    return dataset
 
-for i,c in enumerate(kmeans.labels_):
-    if c not in clusters:
-        clusters[c] = [i]
-    else:
-        clusters[c].append(i)
-my_list = [elem[0] for elem in clusters.values()]
-print(my_list)
+def clusterizar(dataset,k):
+    kmeans = KMeans(n_clusters=k).fit(dataset)
+    matriz_distancias = kmeans.transform(dataset)
+
+    minimos = {}
+    for i,p in enumerate(kmeans.labels_):
+        distancia = matriz_distancias[i][p]
+        if p not in minimos or minimos[p][0] > distancia:
+            minimos[p] = [distancia, i]
+    
+    return minimos
