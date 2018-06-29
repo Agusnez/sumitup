@@ -14,10 +14,7 @@ def lee_frames(carpeta, h, t):
 
     for fotograma in lista_de_fotogramas:
         if cont%t==0:
-            print('he cogido la foto: ' + fotograma
-    )
-            ruta = os.path.join(carpeta,fotograma
-    )
+            ruta = os.path.join(carpeta,fotograma)
             img = cv2.imread(ruta)
             
             color = ('b','g','r')
