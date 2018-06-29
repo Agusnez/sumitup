@@ -35,16 +35,19 @@ def obtain_frames(ruta_carpeta_video,nombre_video,framesxseg):
 #obtain_frames('C:\\Users\\franc\\ETSII\\Curso 2017-2018\\IA\\Trabajo\\ffmpeg-4.0-win64-static\\bin\\','1_min_travel_video.mp4',12)
 
 
-def mover_fotogramas_clave(ruta_carpeta_origen,ListaKeyFrames,ruta_carpeta_destino):
+def mover_fotogramas_clave(ruta_carpeta_origen,dict_keyframes,ruta_carpeta_destino):
 
-    n = str(len(ListaKeyFrames))
+    n = str(len(dict_keyframes))
     subprocess.Popen('md ' + ruta_carpeta_destino, shell=True, stdout=subprocess.PIPE).stdout.read()
     list_keyframes = []
 
-    for cluster,valor in ListaKeyFrames.items():
+    for cluster,valor in dict_keyframes.items():
+        #print(valor[1])
         list_keyframes.append(valor[1])
-        subprocess.Popen('copy ' + ruta_carpeta_origen + '\\' + str(valor[1]) + '.png ' + ruta_carpeta_destino + '\\' + str(valor[1]) + '.png', shell=True, stdout=subprocess.PIPE).stdout.read().decode("utf8").strip()
+        subprocess.Popen('copy ' + ruta_carpeta_origen + '\\' + str(valor[1]) + '.png ' + ruta_carpeta_destino + '\\' + '{0:03}'.format(valor[1]) + '.png', shell=True, stdout=subprocess.PIPE).stdout.read().decode("utf8")
     print('Se han copiado un total de ' + n + ' fotogramas a ' + ruta_carpeta_destino)
+    print(list_keyframes)
+    
 
     return list_keyframes
 
@@ -95,16 +98,19 @@ def secciones_desde_lista(ListaKeyFrames,ruta_carpeta_origen,nombre_video,seg_de
 
 def rename_frames(ruta_carpeta_frames):
     cont = 1
-    for filename in os.listdir(ruta_carpeta_frames):
+    list1 = sorted(os.listdir(ruta_carpeta_frames))
+    print(list1)
+    for filename in list1:
         os.rename(os.path.join(ruta_carpeta_frames,filename), 
-                  os.path.join(ruta_carpeta_frames,str(cont)+'.png'))
+                  os.path.join(ruta_carpeta_frames,'{0:03}'.format(cont)+'.png'))
+        #print('{0:03}'.format(cont))
         cont = cont + 1
 
-#rename_frames('C:\\Users\\franc\\ETSII\\Curso 2017-2018\\IA\\Trabajo\\ffmpeg-4.0-win64-static\\bin\\40_seg_video.mp4_fotogramas_secciones')
+#rename_frames('C:\\Users\\franc\\IA\\Videos\\40_seg_video.mp4_OUTPUTPATH')
 
 def unir_keyframes(carpeta_keyframes,carpeta_dst,nombre_video_original):
     
-    comando = 'cd ' + ruta_ffmpeg + ' && ffmpeg -framerate 2/3 -i ' + carpeta_keyframes + '\%d.png -c:v libx264 -vf fps=23 -s 1280x720 resumen_' + nombre_video_original
+    comando = 'cd ' + ruta_ffmpeg + ' && ffmpeg -framerate 2/3 -i ' + carpeta_keyframes + '\%03d.png -c:v libx264 -vf fps=23 -s 1280x720 resumen_' + nombre_video_original
     subprocess.Popen(comando + ' && move resumen_' + nombre_video_original + ' ' + carpeta_dst + '\\resumen_' + nombre_video_original, shell=True, stdout=subprocess.PIPE).stdout.read()
 
 def unir_frames(carpeta_fotogramas,nombre_archivo_dst):
@@ -112,11 +118,3 @@ def unir_frames(carpeta_fotogramas,nombre_archivo_dst):
     comando = 'cd ' + ruta_ffmpeg + ' && ffmpeg -i ' + carpeta_fotogramas + '\%d.png -c:v libx264 -vf fps=24 -s 1280x720 ' + nombre_archivo_dst
     subprocess.Popen(comando, shell=True, stdout=subprocess.PIPE).stdout.read()
 
-#unir_frames('C:\\Users\\franc\\ETSII\\40_seg_video.mp4_fotogramas_secciones','hecho.mp4')
-
-#def video_to_frames(command):
-#    process = subprocess.Popen(command,stdout=subprocess.PIPE, shell=True, universal_newlines=False)
-#    stdout = process.communicate()[0].decode("utf8").strip()
-#    print(stdout)
-#
-#video_to_frames('cd C:\\Users\\franc\\ETSII\\Curso 2017-2018\\IA\\Trabajo\\ffmpeg-4.0-win64-static\\bin && md cap2 && ffmpeg -i 40_seg_video.mp4 -r 5/1 cap2/%03d.png')

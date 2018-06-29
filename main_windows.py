@@ -3,6 +3,8 @@ from ffmpeg_windows import *
 import argparse
 
 def main_win(ruta_carpeta_video,nombre_video,T,K,H):
+    #carpeta_input = 'C:\\Users\\franc\\IA\\Videos\\' + nombre_video + '_INPUTPATH'
+    #carpeta_output = 'C:\\Users\\franc\\IA\\Videos\\' + nombre_video + '_OUTPUTPATH'
     carpeta_input,carpeta_output = extraer_frames(ruta_carpeta_video,nombre_video)
     dataset = lee_frames(carpeta_input,H,T)
     fotogramas_clave = clusterizar(dataset,K)
@@ -16,7 +18,6 @@ def main_win(ruta_carpeta_video,nombre_video,T,K,H):
     print('Carpeta OUTPUTPATH donde se encuentran los keyframes: ' + carpeta_output)
     print('El video resumen ha sido creado a partir de la siguiente lista de frames originales: ' + str(lista_keyframes))
 
-
-main_win('C:\\Users\\franc\\IA\\Videos','40_seg_video.mp4',1,8,50)
+main_win('C:\\Users\\franc\\IA\\Videos','oceans.mp4',1,25,100)
 
 
