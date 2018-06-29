@@ -28,6 +28,7 @@ def lee_frames(carpeta, h, t):
 
     return dataset
 
+
 def clusterizar(dataset,k):
     kmeans = KMeans(n_clusters=k).fit(dataset)
     matriz_distancias = kmeans.transform(dataset)
