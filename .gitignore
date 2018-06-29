@@ -1,0 +1,8 @@
+.DS_Store
+kmeans/
+clusterv2.py
+.vscode/
+ffmpeg/
+__pycache__/
+video/
+fotogramas

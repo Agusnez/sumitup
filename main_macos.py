@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from cluster import *
 from ffmpeg_macos import mover_keyframes
 import argparse
